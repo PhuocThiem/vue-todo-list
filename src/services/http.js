@@ -9,8 +9,7 @@ axios.interceptors.request.use(config => config, error => Promise.reject(error))
 
 axios.interceptors.response.use(
   response => {
-    console.log('inside interceptors', response)
-    return response
+    return response.data
   },
   error => Promise.reject(error.response || error.request || error.message)
 )

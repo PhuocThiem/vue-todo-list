@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { TaskAPI } from "../api/tasks";
 
 const listOfTasks = ref([]);

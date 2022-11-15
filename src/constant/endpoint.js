@@ -1,3 +1,3 @@
 export const ENDPOINT = {
-  TASK: "task",
+  TASK: "tasks",
 };

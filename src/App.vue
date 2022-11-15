@@ -1,9 +1,12 @@
 <script setup>
+import { computed } from "@vue/runtime-core";
 import { RouterLink, RouterView } from "vue-router";
 import HelloWorld from "./components/HelloWorld.vue";
 import router from "./router/index";
 
-console.log("router", router);
+const routes = computed(() => {
+  return router.options.routes;
+});
 </script>
 
 <template>
@@ -20,14 +23,12 @@ console.log("router", router);
       <HelloWorld msg="You did it!" />
 
       <nav>
-        <!-- <RouterLink
-          v-for="({ path, name }, index) in router"
+        <RouterLink
+          v-for="({ path, name }, index) in routes"
           :key="index"
           :to="path"
           >{{ name }}</RouterLink
-        > -->
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        >
       </nav>
     </div>
   </header>
