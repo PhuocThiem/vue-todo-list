@@ -13,6 +13,9 @@ export class TaskAPI {
   static updateTaskAPI({ id, title }) {
     return http.put(`${TASK}/${id}`, { title });
   }
+  static updateTaskStatusAPI({ id, isCompleted }) {
+    return http.put(`${TASK}/${id}`, { isCompleted });
+  }
   static deleteTaskAPI(taskID) {
     return http.delete(`${TASK}/${taskID}`);
   }

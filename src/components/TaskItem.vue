@@ -1,16 +1,17 @@
 <script setup>
 import { onMounted, watchEffect, watch, ref } from "vue";
-import IconButton from "../components/button/IconButton.vue";
 import moment from "moment";
 
+import IconButton from "../components/button/IconButton.vue";
+import router from "../router";
 import { useTaskStore } from "../stores/task";
 
 const tasks = useTaskStore();
-const { deleteTask, getTasks } = tasks;
+const { deleteTask, getTasks, updateTaskStatus } = tasks;
 
-const deleteID = ref(null);
+const selectedTaskID = ref(null);
 
-const props = defineProps({
+defineProps({
   task: {
     id: Number,
     title: String,
@@ -21,13 +22,21 @@ const props = defineProps({
 
 async function handleDeleteTask(id) {
   await deleteTask(id);
-  deleteID.value = id;
+  selectedTaskID.value = id;
 }
 
-watch(deleteID, () => {
+async function handleUpdateTaskStatus(id, isCompleted) {
+  await updateTaskStatus({ id, isCompleted });
+  selectedTaskID.value = id;
+}
+
+function goToUpdateTaskPage() {
+  router.push({ path: "tasks/update" });
+}
+
+watch(selectedTaskID, () => {
   getTasks();
 });
-
 </script>
 
 <template>
@@ -44,7 +53,9 @@ watch(deleteID, () => {
         Created at: {{ moment(task?.createdAt).format("L") }}
       </p>
       <div class="flex flex-row justify-between w-1/3">
-        <IconButton>
+        <IconButton
+          @handle-onclick="handleUpdateTaskStatus(task.id, !task.isCompleted)"
+        >
           <span v-if="!task?.isCompleted">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -74,7 +85,7 @@ watch(deleteID, () => {
             </svg>
           </span>
         </IconButton>
-        <IconButton>
+        <IconButton @handle-onclick="goToUpdateTaskPage">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"

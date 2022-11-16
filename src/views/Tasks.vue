@@ -39,7 +39,7 @@ watchEffect(() => {
   (getTasksState?.error ||
     createTaskState.error ||
     updateTaskState.error ||
-    deleteTask.error) &&
+    deleteTaskState.error) &&
     alert(getTasksState?.error);
 });
 </script>

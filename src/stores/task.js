@@ -21,6 +21,12 @@ export const useTaskStore = defineStore("task", () => {
     error: null,
   });
 
+  const updateTaskStatusState = reactive({
+    data: null,
+    isRequesting: false,
+    error: null,
+  });
+
   const deleteTaskState = reactive({
     data: null,
     isRequesting: false,
@@ -41,8 +47,16 @@ export const useTaskStore = defineStore("task", () => {
     );
   }
 
+  async function updateTaskStatus({ id, isCompleted }) {
+    return await _handleAsyncFunction(updateTask, () =>
+      TaskAPI.updateTaskStatusAPI({ id, isCompleted })
+    );
+  }
+
   async function deleteTask(id) {
-    return await _handleAsyncFunction(deleteTask, () => TaskAPI.deleteTaskAPI(id));
+    return await _handleAsyncFunction(deleteTask, () =>
+      TaskAPI.deleteTaskAPI(id)
+    );
   }
 
   async function _handleAsyncFunction(state, asyncFunction) {
@@ -61,9 +75,11 @@ export const useTaskStore = defineStore("task", () => {
     getTasksState,
     updateTaskState,
     deleteTaskState,
+    updateTaskStatusState,
     createTask,
     getTasks,
     updateTask,
     deleteTask,
+    updateTaskStatus,
   };
 });
