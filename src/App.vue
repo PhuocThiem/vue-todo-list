@@ -18,21 +18,15 @@ const routes = computed(() => {
       width="125"
       height="125"
     />
-
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
+      <HelloWorld msg="Todo list App!" />
       <nav>
-        <RouterLink
-          v-for="({ path, name }, index) in routes"
-          :key="index"
-          :to="path"
-          >{{ name }}</RouterLink
-        >
+        <span v-for="({ path, name, isShow }, index) in routes" :key="index">
+          <RouterLink :to="path" v-if="isShow">{{ name }}</RouterLink>
+        </span>
       </nav>
     </div>
   </header>
-
   <RouterView />
 </template>
 

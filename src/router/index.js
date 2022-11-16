@@ -1,31 +1,34 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import HomeView from "../views/HomeView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'Home',
-      component: HomeView
+      path: "/",
+      name: "Home",
+      component: HomeView,
+      isShow: true,
     },
-    // {
-    //   path: '/about',
-    //   name: 'About',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/AboutView.vue')
-    // },
     {
-      path: '/tasks',
-      name: 'Todo list',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/Tasks.vue')
-    }
-  ]
-})
+      path: "/tasks",
+      name: "Todo list",
+      component: () => import("../views/Tasks.vue"),
+      isShow: true,
+    },
+    {
+      path: "/tasks/create",
+      name: "Create task",
+      component: () => import("../views/TaskCreate.vue"),
+      isShow: false,
+    },
+    {
+      path: "/tasks/update",
+      name: "Update task",
+      component: () => import("../views/TaskUpdate.vue"),
+      isShow: false,
+    },
+  ],
+});
 
-export default router
+export default router;

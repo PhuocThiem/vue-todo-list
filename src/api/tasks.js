@@ -4,10 +4,16 @@ import { ENDPOINT } from "../constant/endpoint";
 const { TASK } = ENDPOINT;
 
 export class TaskAPI {
-  static createNewTaskAPI(task) {
-    return http.post(TASK, task);
+  static createNewTaskAPI(title) {
+    return http.post(TASK, { title });
   }
   static getTasksAPI() {
     return http.get(TASK);
+  }
+  static updateTaskAPI({ id, title }) {
+    return http.put(`${TASK}/${id}`, { title });
+  }
+  static deleteTaskAPI(taskID) {
+    return http.delete(`${TASK}/${taskID}`);
   }
 }
