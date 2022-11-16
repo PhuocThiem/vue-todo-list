@@ -1,7 +1,14 @@
 <script setup>
-import { onMounted, watchEffect, ref } from "vue";
+import { onMounted, watchEffect, watch, ref } from "vue";
 import IconButton from "../components/button/IconButton.vue";
 import moment from "moment";
+
+import { useTaskStore } from "../stores/task";
+
+const tasks = useTaskStore();
+const { deleteTask, getTasks } = tasks;
+
+const deleteID = ref(null);
 
 const props = defineProps({
   task: {
@@ -12,11 +19,15 @@ const props = defineProps({
   },
 });
 
-const title = ref("");
+async function handleDeleteTask(id) {
+  await deleteTask(id);
+  deleteID.value = id;
+}
 
-watchEffect(() => {
-  title.value = props.task.title;
+watch(deleteID, () => {
+  getTasks();
 });
+
 </script>
 
 <template>
@@ -25,29 +36,43 @@ watchEffect(() => {
   >
     <div
       class="h-1.5 bg-black min-w-full"
-      :class="[task.isCompleted ? 'bg-green-200' : 'bg-sky-100']"
+      :class="[task?.isCompleted ? 'bg-green-200' : 'bg-sky-100']"
     />
-    <p class="text-xl px-1">{{ task.title }}</p>
+    <p class="text-xl px-1">{{ task?.title }}</p>
     <div class="flex flex-row min-w-full justify-between px-1">
       <p class="text-slate-400">
-        Created at: {{ moment(task.createdAt).format("L") }}
+        Created at: {{ moment(task?.createdAt).format("L") }}
       </p>
       <div class="flex flex-row justify-between w-1/3">
         <IconButton>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-6 h-6"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+          <span v-if="!task?.isCompleted">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </span>
+          <span v-else>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </span>
         </IconButton>
         <IconButton>
           <svg
@@ -64,7 +89,7 @@ watchEffect(() => {
             />
           </svg>
         </IconButton>
-        <IconButton>
+        <IconButton @handle-onclick="handleDeleteTask(task.id)">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"

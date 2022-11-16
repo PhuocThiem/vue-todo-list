@@ -41,8 +41,8 @@ export const useTaskStore = defineStore("task", () => {
     );
   }
 
-  function deleteTask(id) {
-    _handleAsyncFunction(deleteTask, () => TaskAPI.deleteTaskAPI(id));
+  async function deleteTask(id) {
+    return await _handleAsyncFunction(deleteTask, () => TaskAPI.deleteTaskAPI(id));
   }
 
   async function _handleAsyncFunction(state, asyncFunction) {

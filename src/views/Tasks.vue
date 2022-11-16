@@ -1,8 +1,9 @@
 <script setup>
-import { onMounted, watchEffect, computed } from "vue";
+import { onMounted, watchEffect, computed, watch } from "vue";
 import { useTaskStore } from "../stores/task";
 import TaskItem from "../components/TaskItem.vue";
 import IconButton from "../components/button/IconButton.vue";
+import router from "../router";
 
 const task = useTaskStore();
 const {
@@ -16,6 +17,8 @@ const {
   deleteTask,
 } = task;
 
+const { title } = getTasksState.data;
+
 onMounted(() => {
   getTasks();
 });
@@ -28,6 +31,10 @@ const completedTasks = computed(() => {
   return getTasksState?.data?.filter((task) => task.isCompleted);
 });
 
+function goToCrateTaskPage() {
+  router.push({ path: "tasks/create" });
+}
+
 watchEffect(() => {
   (getTasksState?.error ||
     createTaskState.error ||
@@ -38,7 +45,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center min-h-screen pt-14">
+  <div class="flex flex-col items-center min-h-fit pt-14">
     <div
       class="flex flex-row justify-center gap-1.5 bg-slate-100 min-w-fit py-3 px-3"
     >
@@ -50,7 +57,7 @@ watchEffect(() => {
         <h3>Completed</h3>
         <TaskItem v-for="task in completedTasks" :key="task.id" :task="task" />
       </div>
-      <IconButton>
+      <IconButton @handle-onclick="goToCrateTaskPage">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
