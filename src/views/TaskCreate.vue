@@ -3,14 +3,19 @@ import { ref } from "vue";
 import IconButton from "../components/button/IconButton.vue";
 import { useTaskStore } from "../stores/task";
 import { IconSpin, IconAddition } from "../components/icons";
+import router from "../router";
 
 const task = useTaskStore();
 const { createTask, createTaskState } = task;
 
 const title = ref("");
 
-function createNewTask() {
-  createTask(title.value);
+async function createNewTask() {
+  await createTask(title.value);
+  if (createTaskState.error) {
+    return;
+  }
+  router.replace({ path: "/tasks" });
 }
 </script>
 

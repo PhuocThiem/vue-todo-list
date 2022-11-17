@@ -43,15 +43,13 @@ watchEffect(() => {
 
 <template>
   <div class="flex flex-col items-center min-h-fit pt-14">
-    <div
-      class="flex flex-row justify-between bg-slate-100 w-4/6 py-3 px-3"
-    >
+    <div class="flex flex-row justify-between bg-slate-100 w-4/6 py-3 px-3">
       <div class="flex flex-col justify-start gap-1.5 bg-slate-100 w-5/12">
-        <h3>Todo</h3>
+        <h3 class="text-lg font-semibold">Todo</h3>
         <TaskItem v-for="task in todoTasks" :key="task.id" :task="task" />
       </div>
       <div class="flex flex-col justify-start gap-1.5 bg-slate-100 w-5/12">
-        <h3>Done</h3>
+        <h3 class="text-lg font-semibold">Done</h3>
         <TaskItem v-for="task in completedTasks" :key="task.id" :task="task" />
       </div>
       <IconButton @handle-onclick="goToCrateTaskPage">

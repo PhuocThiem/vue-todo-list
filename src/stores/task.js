@@ -39,8 +39,8 @@ export const useTaskStore = defineStore("task", () => {
     error: null,
   });
 
-  function createTask(title) {
-    _handleAsyncFunction(createTaskState, () => TaskAPI.createNewTaskAPI(title));
+  async function createTask(title) {
+    return await _handleAsyncFunction(createTaskState, () => TaskAPI.createNewTaskAPI(title));
   }
 
   function getTasks() {

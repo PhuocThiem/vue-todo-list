@@ -5,6 +5,7 @@ import { useRoute } from "vue-router";
 import IconButton from "../components/button/IconButton.vue";
 import { useTaskStore } from "../stores/task";
 import { IconUpload, IconSpin } from "../components/icons";
+import router from "../router";
 
 const task = useTaskStore();
 const { getTaskByID, updateTask, getTaskDetailState, updateTaskState } = task;
@@ -12,8 +13,12 @@ const { getTaskByID, updateTask, getTaskDetailState, updateTaskState } = task;
 const title = ref("");
 const id = ref(null);
 
-function updateTaskTitle() {
-  updateTask(id.value, title.value);
+async function updateTaskTitle() {
+  await updateTask(id.value, title.value);
+  if (updateTaskState.error) {
+    return;
+  }
+  router.replace({ path: "/tasks" });
 }
 
 onMounted(async () => {
