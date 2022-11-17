@@ -11,6 +11,7 @@ const routes = computed(() => {
 
 <template>
   <header>
+    <notifications position="top center"/>
     <img
       alt="Vue logo"
       class="logo"

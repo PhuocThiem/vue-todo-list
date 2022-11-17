@@ -1,6 +1,7 @@
 <script setup>
-import { onMounted, watchEffect, watch, ref } from "vue";
+import { watch, ref } from "vue";
 import moment from "moment";
+import { useNotification } from "@kyvg/vue3-notification";
 
 import IconButton from "../components/button/IconButton.vue";
 import router from "../router";
@@ -12,6 +13,8 @@ import {
   IconDelete,
   IconSpin,
 } from "../components/icons";
+
+const notification = useNotification();
 
 const tasks = useTaskStore();
 const {
@@ -39,12 +42,36 @@ async function handleDeleteTask(id) {
   deleteID.value = id;
   await deleteTask(id);
   selectedTaskID.value = id;
+  if (deleteTaskState.error) {
+    notification.notify({
+      type: "error",
+      title: `${deleteTaskState.data?.title} state hasn't been deleted!`,
+    });
+    return;
+  }
+  notification.notify({
+    type: "success",
+    title: `${deleteTaskState.data?.title} has been deleted`,
+  });
 }
 
 async function handleUpdateTaskStatus(id, isCompleted) {
   updateID.value = id;
   await updateTaskStatus({ id, isCompleted });
   selectedTaskID.value = id;
+  if (updateTaskStatusState.error) {
+    notification.notify({
+      type: "error",
+      title: `${updateTaskStatusState.data?.title} state hasn't been updated!`,
+    });
+    return;
+  }
+  notification.notify({
+    type: "success",
+    title: `${updateTaskStatusState.data?.title} change to ${
+      updateTaskStatusState.data?.isCompleted ? "Done" : "Todo"
+    }`,
+  });
 }
 
 function goToUpdateTaskPage(id) {

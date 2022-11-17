@@ -1,13 +1,15 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { useNotification } from "@kyvg/vue3-notification";
 
 import IconButton from "../components/button/IconButton.vue";
 import { useTaskStore } from "../stores/task";
 import { IconUpload, IconSpin } from "../components/icons";
-import router from "../router";
 
 const task = useTaskStore();
+const notification = useNotification();
+
 const { getTaskByID, updateTask, getTaskDetailState, updateTaskState } = task;
 
 const title = ref("");
@@ -16,9 +18,16 @@ const id = ref(null);
 async function updateTaskTitle() {
   await updateTask(id.value, title.value);
   if (updateTaskState.error) {
+    notification.notify({
+      type: "error",
+      title: `${updateTaskState.data?.title} hasn't been updated!`,
+    });
     return;
   }
-  router.replace({ path: "/tasks" });
+  notification.notify({
+    type: "success",
+    title: `${updateTaskState.data?.title} has been updated!`,
+  });
 }
 
 onMounted(async () => {
