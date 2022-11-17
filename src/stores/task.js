@@ -33,29 +33,41 @@ export const useTaskStore = defineStore("task", () => {
     error: null,
   });
 
+  const getTaskDetailState = reactive({
+    data: null,
+    isRequesting: false,
+    error: null,
+  });
+
   function createTask(title) {
-    _handleAsyncFunction(createTask, () => TaskAPI.createNewTaskAPI(title));
+    _handleAsyncFunction(createTaskState, () => TaskAPI.createNewTaskAPI(title));
   }
 
   function getTasks() {
     _handleAsyncFunction(getTasksState, TaskAPI.getTasksAPI);
   }
 
-  function updateTask({ id, title }) {
-    _handleAsyncFunction(updateTask, () =>
+  async function updateTask(id, title) {
+    return await _handleAsyncFunction(updateTaskState, () =>
       TaskAPI.updateTaskAPI({ id, title })
     );
   }
 
   async function updateTaskStatus({ id, isCompleted }) {
-    return await _handleAsyncFunction(updateTask, () =>
+    return await _handleAsyncFunction(updateTaskStatusState, () =>
       TaskAPI.updateTaskStatusAPI({ id, isCompleted })
     );
   }
 
   async function deleteTask(id) {
-    return await _handleAsyncFunction(deleteTask, () =>
+    return await _handleAsyncFunction(deleteTaskState, () =>
       TaskAPI.deleteTaskAPI(id)
+    );
+  }
+
+  async function getTaskByID(id) {
+    return await _handleAsyncFunction(getTaskDetailState, () =>
+      TaskAPI.getTaskByIdAPI(id)
     );
   }
 
@@ -76,10 +88,12 @@ export const useTaskStore = defineStore("task", () => {
     updateTaskState,
     deleteTaskState,
     updateTaskStatusState,
+    getTaskDetailState,
     createTask,
     getTasks,
     updateTask,
     deleteTask,
     updateTaskStatus,
+    getTaskByID,
   };
 });

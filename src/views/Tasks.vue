@@ -1,8 +1,10 @@
 <script setup>
 import { onMounted, watchEffect, computed, watch } from "vue";
+
 import { useTaskStore } from "../stores/task";
 import TaskItem from "../components/TaskItem.vue";
 import IconButton from "../components/button/IconButton.vue";
+import { IconAddition } from "../components/icons";
 import router from "../router";
 
 const task = useTaskStore();
@@ -11,13 +13,8 @@ const {
   getTasksState,
   updateTaskState,
   deleteTaskState,
-  createTask,
   getTasks,
-  updateTask,
-  deleteTask,
 } = task;
-
-const { title } = getTasksState.data;
 
 onMounted(() => {
   getTasks();
@@ -54,24 +51,11 @@ watchEffect(() => {
         <TaskItem v-for="task in todoTasks" :key="task.id" :task="task" />
       </div>
       <div class="flex flex-col justify-start gap-1.5 bg-slate-100">
-        <h3>Completed</h3>
+        <h3>Done</h3>
         <TaskItem v-for="task in completedTasks" :key="task.id" :task="task" />
       </div>
       <IconButton @handle-onclick="goToCrateTaskPage">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-6 h-6"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 4.5v15m7.5-7.5h-15"
-          />
-        </svg>
+        <IconAddition />
       </IconButton>
     </div>
   </div>

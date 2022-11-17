@@ -19,4 +19,7 @@ export class TaskAPI {
   static deleteTaskAPI(taskID) {
     return http.delete(`${TASK}/${taskID}`);
   }
+  static getTaskByIdAPI(taskID) {
+    return http.get(`${TASK}/${taskID}`);
+  }
 }
