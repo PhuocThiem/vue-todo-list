@@ -40,7 +40,9 @@ export const useTaskStore = defineStore("task", () => {
   });
 
   async function createTask(title) {
-    return await _handleAsyncFunction(createTaskState, () => TaskAPI.createNewTaskAPI(title));
+    return await _handleAsyncFunction(createTaskState, () =>
+      TaskAPI.createNewTaskAPI(title)
+    );
   }
 
   function getTasks() {
@@ -71,6 +73,14 @@ export const useTaskStore = defineStore("task", () => {
     );
   }
 
+  function getTodoTasks() {
+    return getTasksState?.data?.filter((task) => !task.isCompleted);
+  }
+
+  function getCompletedTasks() {
+    return getTasksState?.data?.filter((task) => task.isCompleted);
+  }
+
   async function _handleAsyncFunction(state, asyncFunction) {
     state.isRequesting = true;
     try {
@@ -95,5 +105,7 @@ export const useTaskStore = defineStore("task", () => {
     deleteTask,
     updateTaskStatus,
     getTaskByID,
+    getTodoTasks,
+    getCompletedTasks,
   };
 });

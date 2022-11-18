@@ -14,18 +14,12 @@ const {
   updateTaskState,
   deleteTaskState,
   getTasks,
+  getTodoTasks,
+  getCompletedTasks,
 } = task;
 
 onMounted(() => {
   getTasks();
-});
-
-const todoTasks = computed(() => {
-  return getTasksState?.data?.filter((task) => !task.isCompleted);
-});
-
-const completedTasks = computed(() => {
-  return getTasksState?.data?.filter((task) => task.isCompleted);
 });
 
 function goToCrateTaskPage() {
@@ -46,11 +40,15 @@ watchEffect(() => {
     <div class="flex flex-row justify-between bg-slate-100 w-4/6 py-3 px-3">
       <div class="flex flex-col justify-start gap-1.5 bg-slate-100 w-5/12">
         <h3 class="text-lg font-semibold">Todo</h3>
-        <TaskItem v-for="task in todoTasks" :key="task.id" :task="task" />
+        <TaskItem v-for="task in getTodoTasks()" :key="task.id" :task="task" />
       </div>
       <div class="flex flex-col justify-start gap-1.5 bg-slate-100 w-5/12">
         <h3 class="text-lg font-semibold">Done</h3>
-        <TaskItem v-for="task in completedTasks" :key="task.id" :task="task" />
+        <TaskItem
+          v-for="task in getCompletedTasks()"
+          :key="task.id"
+          :task="task"
+        />
       </div>
       <IconButton @handle-onclick="goToCrateTaskPage">
         <IconAddition />
