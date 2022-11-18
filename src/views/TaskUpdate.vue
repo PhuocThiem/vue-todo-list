@@ -42,22 +42,25 @@ async function updateTaskTitle() {
     class="flex flex-col items-center min-w-full h-24 pb-1 bg-white rounded-md shadow-sm justify-between"
   >
     <h1 class="text-2xl font-bold">Update task</h1>
-    <h3 v-if="getTaskDetailState.error">
-      Failed to load data with task id: {{ id }}
-    </h3>
-    <div class="flex flex-row justify-between w-1/2" v-else>
-      <input
-        v-model="title"
-        placeholder="Inter task title"
-        class="w-3/4 border-solid border-b-[2px] border-neutral-400 focus:border-b-[2px] focus:border-sky-600 focus:outline-none"
-      />
-      <IconButton
-        @handle-onclick="updateTaskTitle"
-        :isDisable="updateTaskState.isRequesting"
-      >
-        <IconUpload v-if="!updateTaskState.isRequesting" />
-        <IconSpin v-else />
-      </IconButton>
-    </div>
+    <IconSpin v-if="getTaskDetailState.isRequesting" />
+    <template v-else>
+      <h3 v-if="getTaskDetailState.error">
+        Failed to load data with task id: {{ id }}
+      </h3>
+      <div class="flex flex-row justify-between w-1/2" v-else>
+        <input
+          v-model="title"
+          placeholder="Inter task title"
+          class="w-3/4 border-solid border-b-[2px] border-neutral-400 focus:border-b-[2px] focus:border-sky-600 focus:outline-none"
+        />
+        <IconButton
+          @handle-onclick="updateTaskTitle"
+          :isDisable="updateTaskState.isRequesting"
+        >
+          <IconUpload v-if="!updateTaskState.isRequesting" />
+          <IconSpin v-else />
+        </IconButton>
+      </div>
+    </template>
   </div>
 </template>
