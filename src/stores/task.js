@@ -45,8 +45,8 @@ export const useTaskStore = defineStore("task", () => {
     );
   }
 
-  function getTasks() {
-    _handleAsyncFunction(getTasksState, TaskAPI.getTasksAPI);
+  async function getTasks() {
+    return _handleAsyncFunction(getTasksState, TaskAPI.getTasksAPI);
   }
 
   async function updateTask(id, title) {

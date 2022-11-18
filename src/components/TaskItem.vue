@@ -38,6 +38,10 @@ defineProps({
   },
 });
 
+watch(selectedTaskID, () => {
+  getTasks();
+});
+
 async function handleDeleteTask(id) {
   deleteID.value = id;
   await deleteTask(id);
@@ -68,7 +72,7 @@ async function handleUpdateTaskStatus(id, isCompleted) {
   }
   notification.notify({
     type: "success",
-    title: `${updateTaskStatusState.data?.title} change to ${
+    title: `${updateTaskStatusState.data?.title} has been moved to ${
       updateTaskStatusState.data?.isCompleted ? "Done" : "Todo"
     }`,
   });
@@ -77,10 +81,6 @@ async function handleUpdateTaskStatus(id, isCompleted) {
 function goToUpdateTaskPage(id) {
   router.push({ path: "/tasks/update", query: { id } });
 }
-
-watch(selectedTaskID, () => {
-  getTasks();
-});
 </script>
 
 <template>

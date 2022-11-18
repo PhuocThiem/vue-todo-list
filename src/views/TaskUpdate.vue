@@ -7,13 +7,19 @@ import IconButton from "../components/button/IconButton.vue";
 import { useTaskStore } from "../stores/task";
 import { IconUpload, IconSpin } from "../components/icons";
 
-const task = useTaskStore();
 const notification = useNotification();
+const task = useTaskStore();
 
 const { getTaskByID, updateTask, getTaskDetailState, updateTaskState } = task;
 
 const title = ref("");
 const id = ref(null);
+
+onMounted(async () => {
+  id.value = useRoute().query.id;
+  await getTaskByID(id.value);
+  title.value = getTaskDetailState.data?.title;
+});
 
 async function updateTaskTitle() {
   await updateTask(id.value, title.value);
@@ -29,12 +35,6 @@ async function updateTaskTitle() {
     title: `${updateTaskState.data?.title} has been updated!`,
   });
 }
-
-onMounted(async () => {
-  id.value = useRoute().query.id;
-  await getTaskByID(id.value);
-  title.value = getTaskDetailState.data?.title;
-});
 </script>
 
 <template>

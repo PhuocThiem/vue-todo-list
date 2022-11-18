@@ -1,5 +1,6 @@
 <script setup>
-import { onMounted, watchEffect, computed, watch } from "vue";
+import { onMounted } from "vue";
+import { useNotification } from "@kyvg/vue3-notification";
 
 import { useTaskStore } from "../stores/task";
 import TaskItem from "../components/TaskItem.vue";
@@ -7,32 +8,24 @@ import IconButton from "../components/button/IconButton.vue";
 import { IconAddition } from "../components/icons";
 import router from "../router";
 
+const notification = useNotification();
 const task = useTaskStore();
-const {
-  createTaskState,
-  getTasksState,
-  updateTaskState,
-  deleteTaskState,
-  getTasks,
-  getTodoTasks,
-  getCompletedTasks,
-} = task;
 
-onMounted(() => {
-  getTasks();
+const { getTasksState, getTasks, getTodoTasks, getCompletedTasks } = task;
+
+onMounted(async () => {
+  await getTasks();
+  if (getTasksState.error) {
+    notification.notify({
+      type: "error",
+      title: "Failed to load data!",
+    });
+  }
 });
 
 function goToCrateTaskPage() {
   router.push({ path: "tasks/create" });
 }
-
-watchEffect(() => {
-  (getTasksState?.error ||
-    createTaskState.error ||
-    updateTaskState.error ||
-    deleteTaskState.error) &&
-    alert(getTasksState?.error);
-});
 </script>
 
 <template>
