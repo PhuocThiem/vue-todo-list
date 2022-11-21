@@ -49,7 +49,7 @@ async function handleDeleteTask(id) {
   }
   notification.notify({
     type: "success",
-    title: `${deleteTaskState.data?.title} has been deleted`,
+    title: `${deleteTaskState.data?.title} has been deleted!`,
   });
 }
 
@@ -93,7 +93,9 @@ function goToUpdateTaskPage(id) {
       <div class="flex flex-row justify-between w-1/3">
         <IconButton
           @handle-onclick="handleUpdateTaskStatus(task.id, !task.isCompleted)"
-          :isDisable="updateTaskStatusState.isRequesting"
+          :isDisable="
+            updateTaskStatusState.isRequesting && updateID === task.id
+          "
           :icon-path="!task?.isCompleted ? ICONS.CHECKED : ICONS.CANCEL"
         >
           <IconSpin
@@ -106,7 +108,7 @@ function goToUpdateTaskPage(id) {
         />
         <IconButton
           @handle-onclick="handleDeleteTask(task.id)"
-          :isDisable="deleteTaskState.isRequesting"
+          :isDisable="deleteTaskState.isRequesting && deleteID === task.id"
           :icon-path="ICONS.DELETE"
         >
           <IconSpin

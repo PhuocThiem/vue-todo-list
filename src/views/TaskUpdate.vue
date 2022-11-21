@@ -15,8 +15,9 @@ const { updateTask, getTaskByID, getTaskDetailState, updateTaskState } = task;
 const title = ref("");
 const id = ref(null);
 
+id.value = useRoute().query.id;
+
 onMounted(async () => {
-  id.value = useRoute().query.id;
   await getTaskByID(id.value);
   title.value = getTaskDetailState.data?.title;
 });
@@ -42,7 +43,7 @@ async function updateTaskTitle() {
     class="flex flex-col items-center min-w-full h-24 pb-1 bg-white rounded-md shadow-sm justify-between"
   >
     <h1 class="text-2xl font-bold">Update task</h1>
-    <IconButton v-if="getTaskDetailState.isRequesting">
+    <IconButton v-if="getTaskDetailState.isRequesting" :is-disable="true">
       <IconSpin />
     </IconButton>
     <template v-else>
