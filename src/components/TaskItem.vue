@@ -6,13 +6,7 @@ import { useNotification } from "@kyvg/vue3-notification";
 import IconButton from "../components/button/IconButton.vue";
 import router from "../router";
 import { useTaskStore } from "../stores/task";
-import {
-  IconChecked,
-  IconCancel,
-  IconUpdate,
-  IconDelete,
-  IconSpin,
-} from "../components/icons";
+import { ICONS, IconSpin } from "../components/icons";
 
 const notification = useNotification();
 
@@ -100,26 +94,24 @@ function goToUpdateTaskPage(id) {
         <IconButton
           @handle-onclick="handleUpdateTaskStatus(task.id, !task.isCompleted)"
           :isDisable="updateTaskStatusState.isRequesting"
+          :icon-path="!task?.isCompleted ? ICONS.CHECKED : ICONS.CANCEL"
         >
           <IconSpin
             v-if="updateTaskStatusState.isRequesting && updateID === task.id"
           />
-          <span v-else>
-            <IconChecked v-if="!task?.isCompleted" />
-            <IconCancel v-else />
-          </span>
         </IconButton>
-        <IconButton @handle-onclick="goToUpdateTaskPage(task.id)">
-          <IconUpdate />
-        </IconButton>
+        <IconButton
+          @handle-onclick="goToUpdateTaskPage(task.id)"
+          :icon-path="ICONS.UPDATE"
+        />
         <IconButton
           @handle-onclick="handleDeleteTask(task.id)"
           :isDisable="deleteTaskState.isRequesting"
+          :icon-path="ICONS.DELETE"
         >
           <IconSpin
             v-if="deleteTaskState.isRequesting && deleteID === task.id"
           />
-          <IconDelete v-else />
         </IconButton>
       </div>
     </div>

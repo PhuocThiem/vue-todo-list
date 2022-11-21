@@ -5,7 +5,7 @@ import { useNotification } from "@kyvg/vue3-notification";
 
 import IconButton from "../components/button/IconButton.vue";
 import { useTaskStore } from "../stores/task";
-import { IconUpload, IconSpin } from "../components/icons";
+import { ICONS, IconSpin } from "../components/icons";
 
 const notification = useNotification();
 const task = useTaskStore();
@@ -42,7 +42,9 @@ async function updateTaskTitle() {
     class="flex flex-col items-center min-w-full h-24 pb-1 bg-white rounded-md shadow-sm justify-between"
   >
     <h1 class="text-2xl font-bold">Update task</h1>
-    <IconSpin v-if="getTaskDetailState.isRequesting" />
+    <IconButton v-if="getTaskDetailState.isRequesting">
+      <IconSpin />
+    </IconButton>
     <template v-else>
       <h3 v-if="getTaskDetailState.error">
         Failed to load data with task id: {{ id }}
@@ -56,9 +58,9 @@ async function updateTaskTitle() {
         <IconButton
           @handle-onclick="updateTaskTitle"
           :isDisable="updateTaskState.isRequesting"
+          :icon-path="ICONS.UPLOAD"
         >
-          <IconUpload v-if="!updateTaskState.isRequesting" />
-          <IconSpin v-else />
+          <IconSpin v-if="updateTaskState.isRequesting" />
         </IconButton>
       </div>
     </template>

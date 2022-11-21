@@ -4,7 +4,7 @@ import { useNotification } from "@kyvg/vue3-notification";
 
 import IconButton from "../components/button/IconButton.vue";
 import { useTaskStore } from "../stores/task";
-import { IconSpin, IconAddition } from "../components/icons";
+import { ICONS, IconSpin } from "../components/icons";
 
 const notification = useNotification();
 
@@ -42,9 +42,9 @@ async function createNewTask() {
       <IconButton
         @handle-onclick="createNewTask"
         :isDisable="createTaskState.isRequesting"
+        :icon-path="ICONS.ADDITION"
       >
-        <IconAddition v-if="!createTaskState.isRequesting" />
-        <IconSpin v-else />
+        <IconSpin v-if="createTaskState.isRequesting" />
       </IconButton>
     </div>
   </div>

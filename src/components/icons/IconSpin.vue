@@ -12,7 +12,7 @@
       r="10"
       stroke="currentColor"
       stroke-width="4"
-    ></circle>
+    />
     <path
       class="opacity-75"
       fill="currentColor"

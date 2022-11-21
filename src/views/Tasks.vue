@@ -5,7 +5,7 @@ import { useNotification } from "@kyvg/vue3-notification";
 import { useTaskStore } from "../stores/task";
 import TaskItem from "../components/TaskItem.vue";
 import IconButton from "../components/button/IconButton.vue";
-import { IconAddition } from "../components/icons";
+import { ICONS } from "../components/icons";
 import router from "../router";
 
 const notification = useNotification();
@@ -43,9 +43,10 @@ function goToCrateTaskPage() {
           :task="task"
         />
       </div>
-      <IconButton @handle-onclick="goToCrateTaskPage">
-        <IconAddition />
-      </IconButton>
+      <IconButton
+        @handle-onclick="goToCrateTaskPage"
+        :icon-path="ICONS.ADDITION"
+      />
     </div>
   </div>
 </template>

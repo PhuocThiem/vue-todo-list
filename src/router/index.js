@@ -27,6 +27,14 @@ const router = createRouter({
       name: "Update task",
       component: () => import("../views/TaskUpdate.vue"),
       isShow: false,
+      // beforeEnter: (to, from, next) => {
+      //   // Redirect to Home page if task id less than 15
+      //   if (to.query?.id < 15) {
+      //     next("/");
+      //     return
+      //   }
+      //   next();
+      // },
     },
   ],
 });
