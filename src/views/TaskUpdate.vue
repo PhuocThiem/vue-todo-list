@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, toRefs } from "vue";
 import { useRoute } from "vue-router";
 import { useNotification } from "@kyvg/vue3-notification";
 
@@ -11,6 +11,18 @@ const notification = useNotification();
 const task = useTaskStore();
 
 const { updateTask, getTaskByID, getTaskDetailState, updateTaskState } = task;
+const getTaskDetailStateRef = toRefs(getTaskDetailState);
+const {
+  data: gettingData,
+  isRequesting: isGetting,
+  error: gettingErr,
+} = getTaskDetailStateRef;
+const updateTaskStateRef = toRefs(updateTaskState);
+const {
+  data: updatedData,
+  isRequesting: isUpdating,
+  error: updatingErr,
+} = updateTaskStateRef;
 
 const title = ref("");
 const id = ref(null);
@@ -19,21 +31,21 @@ id.value = useRoute().query.id;
 
 onMounted(async () => {
   await getTaskByID(id.value);
-  title.value = getTaskDetailState.data?.title;
+  title.value = gettingData.value?.title;
 });
 
 async function updateTaskTitle() {
   await updateTask(id.value, title.value);
-  if (updateTaskState.error) {
+  if (updatingErr.value) {
     notification.notify({
       type: "error",
-      title: `${updateTaskState.data?.title} hasn't been updated!`,
+      title: `${updatedData.value?.title} hasn't been updated!`,
     });
     return;
   }
   notification.notify({
     type: "success",
-    title: `${updateTaskState.data?.title} has been updated!`,
+    title: `${updatedData.value?.title} has been updated!`,
   });
 }
 </script>
@@ -43,13 +55,11 @@ async function updateTaskTitle() {
     class="flex flex-col items-center min-w-full h-24 pb-1 bg-white rounded-md shadow-sm justify-between"
   >
     <h1 class="text-2xl font-bold">Update task</h1>
-    <IconButton v-if="getTaskDetailState.isRequesting" :is-disable="true">
+    <IconButton v-if="isGetting" :is-disable="true">
       <IconSpin />
     </IconButton>
     <template v-else>
-      <h3 v-if="getTaskDetailState.error">
-        Failed to load data with task id: {{ id }}
-      </h3>
+      <h3 v-if="gettingErr">Failed to load data with task id: {{ id }}</h3>
       <div class="flex flex-row justify-between w-1/2" v-else>
         <input
           v-model="title"
@@ -58,10 +68,10 @@ async function updateTaskTitle() {
         />
         <IconButton
           @handle-onclick="updateTaskTitle"
-          :isDisable="updateTaskState.isRequesting"
+          :isDisable="isUpdating"
           :icon-path="ICONS.UPLOAD"
         >
-          <IconSpin v-if="updateTaskState.isRequesting" />
+          <IconSpin v-if="isUpdating" />
         </IconButton>
       </div>
     </template>

@@ -1,5 +1,5 @@
 <script setup>
-import { watch, ref } from "vue";
+import { watch, ref, toRefs } from "vue";
 import moment from "moment";
 import { useNotification } from "@kyvg/vue3-notification";
 
@@ -18,6 +18,19 @@ const {
   deleteTaskState,
   updateTaskStatusState,
 } = tasks;
+
+const updateTaskStatusStateRef = toRefs(updateTaskStatusState);
+const {
+  data: updateData,
+  isRequesting: isUpdating,
+  error: updateErr,
+} = updateTaskStatusStateRef;
+const deleteTaskStateRef = toRefs(deleteTaskState);
+const {
+  data: deleteData,
+  isRequesting: isDeleting,
+  error: deleteErr,
+} = deleteTaskStateRef;
 
 const selectedTaskID = ref(null);
 const deleteID = ref(null);
@@ -40,16 +53,16 @@ async function handleDeleteTask(id) {
   deleteID.value = id;
   await deleteTask(id);
   selectedTaskID.value = id;
-  if (deleteTaskState.error) {
+  if (deleteErr.value) {
     notification.notify({
       type: "error",
-      title: `${deleteTaskState.data?.title} state hasn't been deleted!`,
+      title: `${deleteData.value?.title} state hasn't been deleted!`,
     });
     return;
   }
   notification.notify({
     type: "success",
-    title: `${deleteTaskState.data?.title} has been deleted!`,
+    title: `${deleteData.value?.title} has been deleted!`,
   });
 }
 
@@ -57,17 +70,17 @@ async function handleUpdateTaskStatus(id, isCompleted) {
   updateID.value = id;
   await updateTaskStatus({ id, isCompleted });
   selectedTaskID.value = id;
-  if (updateTaskStatusState.error) {
+  if (updateErr.value) {
     notification.notify({
       type: "error",
-      title: `${updateTaskStatusState.data?.title} state hasn't been updated!`,
+      title: `${updateData.value?.title} state hasn't been updated!`,
     });
     return;
   }
   notification.notify({
     type: "success",
-    title: `${updateTaskStatusState.data?.title} has been moved to ${
-      updateTaskStatusState.data?.isCompleted ? "Done" : "Todo"
+    title: `${updateData.value?.title} has been moved to ${
+      updateData.value?.isCompleted ? "Done" : "Todo"
     }`,
   });
 }
@@ -93,14 +106,10 @@ function goToUpdateTaskPage(id) {
       <div class="flex flex-row justify-between w-1/3">
         <IconButton
           @handle-onclick="handleUpdateTaskStatus(task.id, !task.isCompleted)"
-          :isDisable="
-            updateTaskStatusState.isRequesting && updateID === task.id
-          "
+          :isDisable="isUpdating"
           :icon-path="!task?.isCompleted ? ICONS.CHECKED : ICONS.CANCEL"
         >
-          <IconSpin
-            v-if="updateTaskStatusState.isRequesting && updateID === task.id"
-          />
+          <IconSpin v-if="isUpdating && updateID === task.id" />
         </IconButton>
         <IconButton
           @handle-onclick="goToUpdateTaskPage(task.id)"
@@ -108,12 +117,10 @@ function goToUpdateTaskPage(id) {
         />
         <IconButton
           @handle-onclick="handleDeleteTask(task.id)"
-          :isDisable="deleteTaskState.isRequesting && deleteID === task.id"
+          :isDisable="isDeleting"
           :icon-path="ICONS.DELETE"
         >
-          <IconSpin
-            v-if="deleteTaskState.isRequesting && deleteID === task.id"
-          />
+          <IconSpin v-if="isDeleting && deleteID === task.id" />
         </IconButton>
       </div>
     </div>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, toRefs } from "vue";
 import { useNotification } from "@kyvg/vue3-notification";
 
 import IconButton from "../components/button/IconButton.vue";
@@ -11,19 +11,23 @@ const notification = useNotification();
 const task = useTaskStore();
 const { createTask, createTaskState } = task;
 
+//convert reactive object to ref to using destructing
+const createTaskStateRef = toRefs(createTaskState);
+const { data, isRequesting, error } = createTaskStateRef;
+
 const title = ref("");
 
 async function createNewTask() {
   await createTask(title.value);
-  if (createTaskState.error) {
+  if (error.value) {
     notification.notify({
       type: "error",
-      title: `${createTaskState.data?.title} hasn't been created!`,
+      title: `${data.value.title} hasn't been created!`,
     });
   }
   notification.notify({
     type: "success",
-    title: `${createTaskState.data?.title} has been updated!`,
+    title: `${data.value.title} has been updated!`,
   });
 }
 </script>
@@ -41,10 +45,10 @@ async function createNewTask() {
       />
       <IconButton
         @handle-onclick="createNewTask"
-        :isDisable="createTaskState.isRequesting"
+        :isDisable="isRequesting"
         :icon-path="ICONS.ADDITION"
       >
-        <IconSpin v-if="createTaskState.isRequesting" />
+        <IconSpin v-if="isRequesting" />
       </IconButton>
     </div>
   </div>
