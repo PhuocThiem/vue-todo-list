@@ -1,14 +1,13 @@
 <script setup>
 import { watch, ref, toRefs } from "vue";
 import moment from "moment";
-import { useNotification } from "@kyvg/vue3-notification";
 
 import IconButton from "../components/button/IconButton.vue";
 import router from "../router";
 import { useTaskStore } from "../stores/task";
 import { ICONS, IconSpin } from "../components/icons";
+import { handleNotification } from "../utils/notification";
 
-const notification = useNotification();
 
 const tasks = useTaskStore();
 const {
@@ -53,36 +52,24 @@ async function handleDeleteTask(id) {
   deleteID.value = id;
   await deleteTask(id);
   selectedTaskID.value = id;
-  if (deleteErr.value) {
-    notification.notify({
-      type: "error",
-      title: `${deleteData.value?.title} state hasn't been deleted!`,
-    });
-    return;
-  }
-  notification.notify({
-    type: "success",
-    title: `${deleteData.value?.title} has been deleted!`,
-  });
+  handleNotification(
+    deleteErr.value,
+    `${deleteData.value?.title} has been deleted!`,
+    `${deleteData.value?.title} state hasn't been deleted!`
+  );
 }
 
 async function handleUpdateTaskStatus(id, isCompleted) {
   updateID.value = id;
   await updateTaskStatus({ id, isCompleted });
   selectedTaskID.value = id;
-  if (updateErr.value) {
-    notification.notify({
-      type: "error",
-      title: `${updateData.value?.title} state hasn't been updated!`,
-    });
-    return;
-  }
-  notification.notify({
-    type: "success",
-    title: `${updateData.value?.title} has been moved to ${
+  handleNotification(
+    updateErr.value,
+    `${updateData.value?.title} has been moved to ${
       updateData.value?.isCompleted ? "Done" : "Todo"
     }`,
-  });
+    `${updateData.value?.title} state hasn't been updated!`
+  );
 }
 
 function goToUpdateTaskPage(id) {

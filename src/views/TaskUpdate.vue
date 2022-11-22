@@ -1,13 +1,12 @@
 <script setup>
 import { ref, onMounted, toRefs } from "vue";
 import { useRoute } from "vue-router";
-import { useNotification } from "@kyvg/vue3-notification";
 
 import IconButton from "../components/button/IconButton.vue";
 import { useTaskStore } from "../stores/task";
 import { ICONS, IconSpin } from "../components/icons";
+import { handleNotification } from "../utils/notification.js";
 
-const notification = useNotification();
 const task = useTaskStore();
 
 const { updateTask, getTaskByID, getTaskDetailState, updateTaskState } = task;
@@ -36,17 +35,11 @@ onMounted(async () => {
 
 async function updateTaskTitle() {
   await updateTask(id.value, title.value);
-  if (updatingErr.value) {
-    notification.notify({
-      type: "error",
-      title: `${updatedData.value?.title} hasn't been updated!`,
-    });
-    return;
-  }
-  notification.notify({
-    type: "success",
-    title: `${updatedData.value?.title} has been updated!`,
-  });
+  handleNotification(
+    updatingErr.value,
+    `${updatedData.value?.title} has been updated!`,
+    `${updatedData.value?.title} hasn't been updated!`
+  );
 }
 </script>
 

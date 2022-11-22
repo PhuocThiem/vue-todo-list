@@ -1,12 +1,11 @@
 <script setup>
 import { ref, toRefs } from "vue";
-import { useNotification } from "@kyvg/vue3-notification";
 
 import IconButton from "../components/button/IconButton.vue";
 import { useTaskStore } from "../stores/task";
 import { ICONS, IconSpin } from "../components/icons";
+import { handleNotification } from "../utils/notification";
 
-const notification = useNotification();
 
 const task = useTaskStore();
 const { createTask, createTaskState } = task;
@@ -19,16 +18,11 @@ const title = ref("");
 
 async function createNewTask() {
   await createTask(title.value);
-  if (error.value) {
-    notification.notify({
-      type: "error",
-      title: `${data.value.title} hasn't been created!`,
-    });
-  }
-  notification.notify({
-    type: "success",
-    title: `${data.value.title} has been updated!`,
-  });
+  handleNotification(
+    error.value,
+    `${data.value.title} has been updated!`,
+    `${data.value.title} hasn't been created!`
+  );
 }
 </script>
 
