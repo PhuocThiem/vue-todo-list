@@ -74,11 +74,15 @@ async function handleUpdateTaskStatus(id, isCompleted) {
 function goToUpdateTaskPage(id) {
   router.push({ path: "/tasks/update", query: { id } });
 }
+function goToTaskDetailPage(id) {
+  router.push({ path: "/tasks/detail", query: { id } });
+}
 </script>
 
 <template>
   <div
     class="flex flex-col items-start max-w-full min-h-[94px] pb-1 pt-0 bg-white rounded-md shadow-sm justify-between"
+    @click="goToTaskDetailPage(task.id)"
   >
     <div
       class="h-1.5 bg-black min-w-full"
