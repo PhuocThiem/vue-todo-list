@@ -1,13 +1,12 @@
 <script setup>
 import WelcomeItem from "./WelcomeItem.vue";
-import Button from "./button/Button.vue";
-import { ICONS } from "./icons";
+import { ICONS, Icon } from "./icons";
 </script>
 
 <template>
   <WelcomeItem>
     <template #icon>
-      <Button :icon-path="ICONS.DOCUMENTATION" :is-disable="true"/>
+      <Icon :icon-path="ICONS.DOCUMENTATION" />
     </template>
     <template #heading>Documentation</template>
 
@@ -20,7 +19,7 @@ import { ICONS } from "./icons";
 
   <WelcomeItem>
     <template #icon>
-      <Button :icon-path="ICONS.TOOLING" :is-disable="true"/>
+      <Icon :icon-path="ICONS.TOOLING" />
     </template>
     <template #heading>Tooling</template>
 
@@ -54,7 +53,7 @@ import { ICONS } from "./icons";
 
   <WelcomeItem>
     <template #icon>
-      <Button :icon-path="ICONS.ECOSYSTEM" :is-disable="true"/>
+      <Icon :icon-path="ICONS.ECOSYSTEM" />
     </template>
     <template #heading>Ecosystem</template>
 
@@ -80,7 +79,7 @@ import { ICONS } from "./icons";
 
   <WelcomeItem>
     <template #icon>
-      <Button :icon-path="ICONS.COMMUNITY" :is-disable="true"/>
+      <Icon :icon-path="ICONS.COMMUNITY" />
     </template>
     <template #heading>Community</template>
 
@@ -105,7 +104,7 @@ import { ICONS } from "./icons";
 
   <WelcomeItem>
     <template #icon>
-      <Button :icon-path="ICONS.SUPPORT" :is-disable="true"/>
+      <Icon :icon-path="ICONS.SUPPORT" />
     </template>
     <template #heading>Support Vue</template>
 
