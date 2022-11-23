@@ -8,7 +8,6 @@ import { useTaskStore } from "../stores/task";
 import { ICONS, IconSpin } from "../components/icons";
 import { handleNotification } from "../utils/notification";
 
-
 const tasks = useTaskStore();
 const {
   deleteTask,
@@ -83,8 +82,8 @@ function goToUpdateTaskPage(id) {
   >
     <div
       class="h-1.5 bg-black min-w-full"
-      :class="[task?.isCompleted ? 'bg-green-200' : 'bg-sky-100']"
-    />
+      :class="[task?.isCompleted ? 'completed' : 'todo']"
+    ></div>
     <p class="text-xl px-1">{{ task?.title }}</p>
     <div class="flex flex-row min-w-full justify-between px-1 flex-wrap">
       <p class="text-slate-400">
@@ -113,3 +112,16 @@ function goToUpdateTaskPage(id) {
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+
+$green-200: #bbf7d0;
+$sky-100: #e0f2fe;
+
+.todo {
+  background-color: $sky-100;
+}
+.completed {
+  background-color: $green-200;
+}
+</style>
