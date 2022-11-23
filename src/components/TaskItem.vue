@@ -2,10 +2,10 @@
 import { watch, ref, toRefs } from "vue";
 import moment from "moment";
 
-import IconButton from "../components/button/IconButton.vue";
+import Button from "./button/Button.vue";
 import router from "../router";
 import { useTaskStore } from "../stores/task";
-import { ICONS, IconSpin } from "../components/icons";
+import { ICONS, IconSpin, Icon } from "../components/icons";
 import { handleNotification } from "../utils/notification";
 
 const tasks = useTaskStore();
@@ -90,31 +90,31 @@ function goToUpdateTaskPage(id) {
         Created at: {{ moment(task?.createdAt).format("L") }}
       </p>
       <div class="flex flex-row justify-between w-1/3">
-        <IconButton
+        <Button
           @handle-onclick="handleUpdateTaskStatus(task.id, !task.isCompleted)"
           :isDisable="isUpdating"
-          :icon-path="!task?.isCompleted ? ICONS.CHECKED : ICONS.CANCEL"
         >
-          <IconSpin v-if="isUpdating && updateID === task.id" />
-        </IconButton>
-        <IconButton
-          @handle-onclick="goToUpdateTaskPage(task.id)"
-          :icon-path="ICONS.UPDATE"
-        />
-        <IconButton
+          <Icon :icon-path="!task?.isCompleted ? ICONS.CHECKED : ICONS.CANCEL">
+            <IconSpin v-if="isUpdating && updateID === task.id" />
+          </Icon>
+        </Button>
+        <Button @handle-onclick="goToUpdateTaskPage(task.id)">
+          <Icon :icon-path="ICONS.UPDATE" />
+        </Button>
+        <Button
           @handle-onclick="handleDeleteTask(task.id)"
           :isDisable="isDeleting"
-          :icon-path="ICONS.DELETE"
         >
-          <IconSpin v-if="isDeleting && deleteID === task.id" />
-        </IconButton>
+          <Icon :icon-path="ICONS.DELETE">
+            <IconSpin v-if="isDeleting && deleteID === task.id" />
+          </Icon>
+        </Button>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-
 $green-200: #bbf7d0;
 $sky-100: #e0f2fe;
 

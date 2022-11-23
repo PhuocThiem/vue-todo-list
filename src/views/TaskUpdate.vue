@@ -2,9 +2,9 @@
 import { ref, onMounted, toRefs } from "vue";
 import { useRoute } from "vue-router";
 
-import IconButton from "../components/button/IconButton.vue";
+import Button from "../components/button/Button.vue";
 import { useTaskStore } from "../stores/task";
-import { ICONS, IconSpin } from "../components/icons";
+import { ICONS, IconSpin, Icon } from "../components/icons";
 import { handleNotification } from "../utils/notification.js";
 
 const task = useTaskStore();
@@ -48,9 +48,9 @@ async function updateTaskTitle() {
     class="flex flex-col items-center min-w-full h-24 pb-1 bg-white rounded-md shadow-sm justify-between"
   >
     <h1 class="text-2xl font-bold">Update task</h1>
-    <IconButton v-if="isGetting" :is-disable="true">
+    <Icon v-if="isGetting">
       <IconSpin />
-    </IconButton>
+    </Icon>
     <template v-else>
       <h3 v-if="gettingErr">Failed to load data with task id: {{ id }}</h3>
       <div class="flex flex-row justify-between w-1/2" v-else>
@@ -59,13 +59,11 @@ async function updateTaskTitle() {
           placeholder="Inter task title"
           class="w-3/4 border-solid border-b-[2px] border-neutral-400 focus:border-b-[2px] focus:border-sky-600 focus:outline-none"
         />
-        <IconButton
-          @handle-onclick="updateTaskTitle"
-          :isDisable="isUpdating"
-          :icon-path="ICONS.UPLOAD"
-        >
-          <IconSpin v-if="isUpdating" />
-        </IconButton>
+        <Button @handle-onclick="updateTaskTitle" :isDisable="isUpdating">
+          <Icon :icon-path="ICONS.UPLOAD">
+            <IconSpin v-if="isUpdating" />
+          </Icon>
+        </Button>
       </div>
     </template>
   </div>

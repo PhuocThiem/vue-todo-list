@@ -1,11 +1,10 @@
 <script setup>
 import { ref, toRefs } from "vue";
 
-import IconButton from "../components/button/IconButton.vue";
+import Button from "../components/button/Button.vue";
 import { useTaskStore } from "../stores/task";
-import { ICONS, IconSpin } from "../components/icons";
+import { ICONS, IconSpin, Icon } from "../components/icons";
 import { handleNotification } from "../utils/notification";
-
 
 const task = useTaskStore();
 const { createTask, createTaskState } = task;
@@ -37,13 +36,11 @@ async function createNewTask() {
         placeholder="Input task title"
         class="w-3/4 border-solid border-b-[2px] border-neutral-400 focus:border-b-[2px] focus:border-sky-600 focus:outline-none"
       />
-      <IconButton
-        @handle-onclick="createNewTask"
-        :isDisable="isRequesting"
-        :icon-path="ICONS.ADDITION"
-      >
-        <IconSpin v-if="isRequesting" />
-      </IconButton>
+      <Button @handle-onclick="createNewTask" :isDisable="isRequesting">
+        <Icon :icon-path="ICONS.ADDITION">
+          <IconSpin v-if="isRequesting" />
+        </Icon>
+      </Button>
     </div>
   </div>
 </template>
